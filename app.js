@@ -1,9 +1,10 @@
-const http = require("http");
+const os = require("os");
+// const { greeting } = require("./greeting");
+const { date, greeting } = require("./greeting");
 
-http
-	.createServer(function (req, res) {
-		res.end("NodeJs Intro");
-	})
-	.listen(3000, function () {
-		console.log("Running server in 3000");
-	});
+//get current user name
+const userName = os.userInfo().username;
+
+// console.log(`Дата запроса: ${greeting.date}`);
+console.log(`Дата запроса: ${date}`);
+greeting.printMessage(userName);
