@@ -1,14 +1,14 @@
 const currentDate = new Date();
-exports.date = currentDate;
+global.date = currentDate;
 
-exports.printMessage = function (name) {
+exports.printMessage = function () {
 	const hour = currentDate.getHours();
 
 	if (hour > 16) {
-		console.log(`Добрый вечер ${name}`);
+		console.log(`Добрый вечер ${global.userName}`);
 	} else if (hour > 10) {
-		console.log(`Добрый день ${name}`);
+		console.log(`Добрый день ${userName}`);
 	} else {
-		console.log(`Доброе утро ${name}`);
+		console.log(`Доброе утро ${userName}`);
 	}
 };

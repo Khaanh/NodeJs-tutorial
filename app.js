@@ -1,10 +1,7 @@
-const os = require("os");
 // const { greeting } = require("./greeting");
-const { date, greeting } = require("./greeting");
+const greeting = require("./greeting");
 
-//get current user name
-const userName = os.userInfo().username;
+global.userName = "Khanh";
 
-// console.log(`Дата запроса: ${greeting.date}`);
-console.log(`Дата запроса: ${date}`);
-greeting.printMessage(userName);
+// global.console.log(date);
+console.log(greeting.printMessage());
