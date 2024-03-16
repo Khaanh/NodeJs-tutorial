@@ -1,31 +1,14 @@
-// // const { greeting } = require("./greeting");
-// const greeting = require("./greeting");
+const EventEmitter = require("events");
 
-// global.userName = "Khanh";
+// определяем эмиттер событий
+const emitter = new EventEmitter();
 
-// // global.console.log(date);
-// console.log(greeting.printMessage());
+// имя события, которое будет обрабатываться
+const eventName = "greet";
 
-// Передача параметров приложению
-// const nodePath = process.argv[0];
-// const appPath = process.argv[1];
-// const username = process.argv[2];
-// const userage = process.argv[3];
+emitter.on(eventName, () => {
+	console.log("Hello World");
+});
 
-// console.log("nodePath", nodePath);
-// console.log("appPath", appPath);
-// console.log();
-// console.log("name", username);
-// console.log("age", userage);
-
-const http = require("http");
-
-const text = "Hello World";
-const PORT = 3003;
-
-http
-	.createServer((req, res) => {
-		console.log(text);
-		res.end(text);
-	})
-	.listen(PORT, () => console.log(`running server`));
+// генерируем событие greet;
+emitter.emit(eventName);
