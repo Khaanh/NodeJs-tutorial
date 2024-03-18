@@ -1,37 +1,42 @@
-// const EventEmitter = require("events");
-
-// // определяем эмиттер событий
-// const emitter = new EventEmitter();
-
-// // имя события, которое будет обрабатываться
-// const eventName = "greet";
-
-// emitter.on(eventName, () => {
-// 	console.log("Hello World");
-// });
-
-// // генерируем событие greet;
-// emitter.emit(eventName);
 const http = require("http");
-const fs = require("fs");
-
 const PORT = 3003;
+
+// http
+// 	.createServer((req, res) => {
+// 		res.setHeader("Content-type", "text/html; charset=utf-8;");
+
+// 		if (req.url === "/home" || req.url === "/") {
+// 			res.write("<h1>Home</h1>");
+// 		} else if (req.url == "/about") {
+// 			res.write("<h1>About</h1>");
+// 		} else if (req.url == "/contact") {
+// 			res.write("<h1>Contact</h1>");
+// 		} else {
+// 			res.write("<h2>Not found</h2>");
+// 		}
+
+// 		res.end();
+// 	})
+// 	.listen(PORT, () => {
+// 		console.log(`localhost:${PORT}`);
+// 	});
 
 http
 	.createServer((req, res) => {
-		res.end("Hello");
+		res.setHeader("Content-Type", "text/html; charset=utf-8;");
+
+		if (req.url === "/") {
+			res.statusCode = 302; // временная переадресация
+			// на адрес localhost:3003/newpage
+
+			res.setHeader("Location", "/newpage");
+		} else if (req.url == "/newpage") {
+			res.write("New address");
+		} else {
+			res.statusCode = 404; // address not found
+			res.write("Not Found");
+		}
+
+		res.end();
 	})
-	.listen(PORT, () => {
-		// console.log("Server running in 3003");
-	});
-
-// const writeableStream = fs.createWriteStream("hello.txt");
-// writeableStream.write("Привет мир!\n");
-// writeableStream.write("Продолжение записи\n");
-// writeableStream.end("Завершение записи\n");
-
-// const readableStream = fs.createReadStream("hello.txt");
-// readableStream.on("data", function (chunk) {
-// 	console.log("ssssssssssssssssssssssss");
-// 	console.log("chunk: ", chunk.toString());
-// });
+	.listen(PORT);
