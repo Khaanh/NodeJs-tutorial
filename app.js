@@ -1,37 +1,33 @@
-// const EventEmitter = require("events");
-
-// // определяем эмиттер событий
-// const emitter = new EventEmitter();
-
-// // имя события, которое будет обрабатываться
-// const eventName = "greet";
-
-// emitter.on(eventName, () => {
-// 	console.log("Hello World");
-// });
-
-// // генерируем событие greet;
-// emitter.emit(eventName);
 const http = require("http");
 const fs = require("fs");
-
-const PORT = 3003;
+const PORT = 3005;
 
 http
-	.createServer((req, res) => {
-		res.end("Hello");
+	.createServer(async (req, res) => {
+		if (req.url === "/user") {
+			let body = "";
+			console.log("body: ", body);
+
+			for await (const chunk of req) {
+				body += chunk;
+				console.log("chunk: ", chunk);
+			}
+
+			let userName = "";
+			let userAge = 0;
+
+			const params = body.split("&");
+			console.log("params: ", params);
+
+			for (param of params) {
+				const [paramName, paramAge] = param.split("=");
+				if (paramName === "userName") userName = paramName;
+				if (paramAge === "userAge") userAge = paramAge;
+				res.write(`Your name: ${paramName}. Your age: ${paramAge}`);
+			}
+			res.end();
+		} else {
+			fs.readFile("index.html", (_, data) => res.end(data));
+		}
 	})
-	.listen(PORT, () => {
-		// console.log("Server running in 3003");
-	});
-
-// const writeableStream = fs.createWriteStream("hello.txt");
-// writeableStream.write("Привет мир!\n");
-// writeableStream.write("Продолжение записи\n");
-// writeableStream.end("Завершение записи\n");
-
-// const readableStream = fs.createReadStream("hello.txt");
-// readableStream.on("data", function (chunk) {
-// 	console.log("ssssssssssssssssssssssss");
-// 	console.log("chunk: ", chunk.toString());
-// });
+	.listen(PORT, () => console.log(`Server running on ${PORT}`));
