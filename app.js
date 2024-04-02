@@ -1,33 +1,32 @@
 const http = require("http");
 const fs = require("fs");
-const PORT = 3005;
 
 http
-	.createServer(async (req, res) => {
-		if (req.url === "/user") {
-			let body = "";
-			console.log("body: ", body);
-
-			for await (const chunk of req) {
+	.createServer(async (request, response) => {
+		if (request.url == "/test") {
+			let body = ""; // буфер для получаемых данных
+			// получаем данные из запроса в буфер
+			for await (const chunk of request) {
 				body += chunk;
-				console.log("chunk: ", chunk);
 			}
-
+			// для параметра name
 			let userName = "";
+			// для параметра age
 			let userAge = 0;
-
+			// разбиваем запрос на параметры по символу &
 			const params = body.split("&");
-			console.log("params: ", params);
-
+			// проходим по всем параметрам и определяем их значения
 			for (param of params) {
-				const [paramName, paramAge] = param.split("=");
-				if (paramName === "userName") userName = paramName;
-				if (paramAge === "userAge") userAge = paramAge;
-				res.write(`Your name: ${paramName}. Your age: ${paramAge}`);
+				// разбиваем каждый параметр на имя и значение
+				const [paramName, paramValue] = param.split("=");
+				if (paramName === "username") userName = paramValue;
+				if (paramName === "userage") userAge = paramValue;
 			}
-			res.end();
+			response.end(`Your name: ${userName}  Your Age: ${userAge}`);
 		} else {
-			fs.readFile("index.html", (_, data) => res.end(data));
+			fs.readFile("index.html", (_, data) => response.end(data));
 		}
 	})
-	.listen(PORT, () => console.log(`Server running on ${PORT}`));
+	.listen(3000, () =>
+		console.log("Сервер запущен по адресу http://localhost:3000")
+	);
