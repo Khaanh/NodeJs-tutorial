@@ -1,32 +1,21 @@
-const http = require("http");
-const fs = require("fs");
+const express = require("express");
 
-http
-	.createServer(async (request, response) => {
-		if (request.url == "/test") {
-			let body = ""; // буфер для получаемых данных
-			// получаем данные из запроса в буфер
-			for await (const chunk of request) {
-				body += chunk;
-			}
-			// для параметра name
-			let userName = "";
-			// для параметра age
-			let userAge = 0;
-			// разбиваем запрос на параметры по символу &
-			const params = body.split("&");
-			// проходим по всем параметрам и определяем их значения
-			for (param of params) {
-				// разбиваем каждый параметр на имя и значение
-				const [paramName, paramValue] = param.split("=");
-				if (paramName === "username") userName = paramValue;
-				if (paramName === "userage") userAge = paramValue;
-			}
-			response.end(`Your name: ${userName}  Your Age: ${userAge}`);
-		} else {
-			fs.readFile("index.html", (_, data) => response.end(data));
-		}
-	})
-	.listen(3000, () =>
-		console.log("Сервер запущен по адресу http://localhost:3000")
-	);
+const app = express();
+const PORT = 3000;
+
+app.use(function (_, _, next) {
+	console.log("Middleware 1");
+	next();
+});
+
+app.use("/about", function (_, res) {
+	console.log("Middleware 2");
+	res.send("About Middleware 2");
+});
+
+app.get("/", function (_, res) {
+	console.log("Route /");
+	res.send("Hello");
+});
+
+app.listen(PORT, console.log(`Running server ${PORT}`));
